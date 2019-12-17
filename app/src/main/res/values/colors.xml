@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="primary">#E43F3F</color>
+    <color name="primary_dark">#E12929</color>
+    <color name="success">#E12929</color>
+    <color name="primary_darker">#CC1D1D</color>
+    <color name="accent">#F1F1CF</color>
+    <color name="light_blue">#5959DB</color>
+    <color name="app_background">#fefcfa</color>
+    <color name="float_button">#ae4fec</color>
+    <color name="super_light_green">#B6FCD5</color>
+    <color name="orange">#91ccc3</color>
+    <color name="light_green1">#cce4da</color>
+    <color name="light_grey">#F0F8FF</color>
+    <color name="fair_blue">#8192d9</color>
+    <color name="fair_grey">#468499</color>
+    <color name="secondary_crane_red">#5D1049</color>
+    <color name="yellow_ring_color">#ecae4f</color>
+    <color name="light_yellow">		#ffdfdf</color>
+    <color name="light_sky">#AFEEEE</color>
+    <color name="purple">#5b3165</color>
+    <color name="light_orange">#fa8072</color>
+    <color name="light_blue1">#55b4da</color>
+    <color name="black">#000000</color>
+    <color name="jet">#222222</color>
+    <color name="oil">#333333</color>
+    <color name="monsoon">#777777</color>
+    <color name="jumbo">#888888</color>
+    <color name="aluminum">#999999</color>
+    <color name="base">#AAAAAA</color>
+    <color name="iron">#CCCCCC</color>
+    <color name="white">#FFFFFF</color>
+    <color name="pressed_color">#4d90fe</color>
+    <color name="default_color">#ffffff</color>
+    <color name="dark_blue">#012CA2</color>
+    <color name="light_green">#00A788</color>
+</resources>

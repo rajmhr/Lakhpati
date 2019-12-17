@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context="com.lakhpati.activity.DrawerActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardBackgroundColor="@color/light_orange"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="4dp"
+        card_view:cardMaxElevation="6dp"
+        card_view:contentPaddingBottom="15dp"
+        card_view:contentPaddingLeft="25dp"
+        card_view:contentPaddingRight="25dp"
+        card_view:contentPaddingTop="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_intro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="All set to start lucky draw."
+                android:textColor="@color/purple"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txt_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:text="Please use button below to start lucky draw!"
+                android:textSize="16sp" />
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/goodluck"/>
+           <!-- <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="Good Luck!!"
+                android:textSize="25dp" />-->
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_marginTop="20dp"
+                android:id="@+id/btn_takebackto_defination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get me back to lottery create screen."
+                android:gravity="center"
+                style="@style/NormalMaterialButton"
+                android:textSize="14dp"
+                android:padding="15dp"
+                android:textAllCaps="false"
+                />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

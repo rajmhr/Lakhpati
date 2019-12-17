@@ -1,0 +1,99 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        card_view:cardBackgroundColor="@color/cardview_shadow_end_color"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="4dp"
+        card_view:cardMaxElevation="6dp"
+        card_view:contentPadding="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txt_grouphistory_lotteryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:text="Lottery: Round 1"
+                android:textColor="@color/purple"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/txt_grouphistory_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_grouphistory_lotteryName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:text="Completed on Jan 10 2019"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txt_grouphistory_ticketPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_grouphistory_period"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:text="Bet coin : 10 Coins"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_grouphistory_prizeMoney"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_grouphistory_period"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:paddingEnd="5dp"
+                android:text="Coin Prize : 200 Coins"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/img_trophy"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/txt_grouphistory_prizeMoney"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/troply"/>
+
+            <TextView
+                android:id="@+id/txt_grouphistory_winner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/img_trophy"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Winner: 'xx xx xx xx xx' ( xxx.xxx123@gmail.com ) "
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/txt_grouphistory_myTickets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_grouphistory_winner"
+                android:layout_centerHorizontal="true"
+                android:text="Congratulation!! You won this lottery."
+                android:textColor="@color/light_blue"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
+

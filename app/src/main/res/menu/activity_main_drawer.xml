@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_userprofile"
+            android:icon="@drawable/usersmallicon"
+            android:title="My Profile" />
+        <item
+            android:id="@+id/nav_transactionHistory"
+            android:icon="@drawable/img_prize"
+            android:title="Transaction History" />
+        <item
+            android:id="@+id/nav_buySellCoins"
+            android:icon="@drawable/img_payment"
+            android:title="Load - Transfer Coins" />
+        <item
+            android:id="@+id/nav_return"
+            android:icon="@drawable/img_payment"
+            android:title="Return Coin" />
+        <item
+            android:id="@+id/nav_lakhpatiOpen"
+            android:icon="@drawable/img_lakhpati"
+            android:title="Lakhpati (In future)" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+            <item
+                android:id="@+id/nav_lakhpatilogout"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Log Out" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_groupLotteryDefination"
+        android:icon="@drawable/defination"
+        android:title="@string/fragment_groupLotteryDefination"/>
+    <item
+        android:id="@+id/action_groupchat"
+        android:icon="@drawable/chat"
+        android:title="@string/fragment_groupChat"/>
+    <item
+        android:id="@+id/action_groupLuckdraw"
+        android:icon="@drawable/livedraw"
+        android:title="@string/fragment_groupLuckdraw"/>
+    <item
+        android:id="@+id/action_groupLotteryHistory"
+        android:icon="@drawable/admin"
+        android:title="@string/fragment_groupLotteryHistory"/>
+</menu>
