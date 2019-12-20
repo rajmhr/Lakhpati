@@ -67,8 +67,8 @@ public class GroupDetailActivity extends AppCompatActivity implements InternetCo
     AssignAdminRecyclerAdapter assignAdminRecyclerAdapter;
     AlertDialog assignAdmin_alertDialog;
     AlertDialog addUserToGroup_alertDialog;
-    Button btn_cancel_assignAdmin;
-    Button btn_create_assignAdmin;
+    MaterialButton btn_cancel_assignAdmin;
+    MaterialButton btn_create_assignAdmin;
 
     //MaterialButton btn_findUser;
     MaterialButton btn_cancel_addUserToGroup;
@@ -255,8 +255,8 @@ public class GroupDetailActivity extends AppCompatActivity implements InternetCo
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         assignAdmin_dialogView = layoutInflater.inflate(R.layout.activity_assign_admin, null);
         listView_assignAdmin = (RecyclerView) assignAdmin_dialogView.findViewById(R.id.listview_assignAdmin);
-        btn_cancel_assignAdmin = (Button) assignAdmin_dialogView.findViewById(R.id.btn_cancel_assignAdmin);
-        btn_create_assignAdmin = (Button) assignAdmin_dialogView.findViewById(R.id.btn_create_assignAdmin);
+        btn_cancel_assignAdmin = assignAdmin_dialogView.findViewById(R.id.btn_cancel_assignAdmin);
+        btn_create_assignAdmin = assignAdmin_dialogView.findViewById(R.id.btn_create_assignAdmin);
     }
 
     private void saveAssignAdmin() {

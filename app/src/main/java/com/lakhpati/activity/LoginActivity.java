@@ -55,12 +55,12 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText _passwordText;
 
     @BindView(R.id.btn_login)
-    Button btn_login;
+    MaterialButton btn_login;
 
     @BindView(R.id.link_signup)
-    Button link_signup;
+    MaterialButton link_signup;
 
-    AlertDialog alertDialog;
+    private AlertDialog alertDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!validate(email, password))
             return;
-        btn_login.setEnabled(false);
+
 
         loginToServer(email, password);
     }
@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginToServer(String email, String password) {
         alertDialog.show();
-
+        btn_login.setEnabled(false);
         UserApiInterface userApiService = RetrofitClientInstance.getRetrofitInstance().create(UserApiInterface.class);
 
         LoginModel model = new LoginModel();
@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
         callValue.enqueue(new Callback<ReturnModel>() {
             @Override
             public void onResponse(Call<ReturnModel> call, Response<ReturnModel> response) {
-
+                btn_login.setEnabled(true);
                 if (response.body().isSuccess()) {
                     String returnData = response.body().getReturnData();
                     UserDetailViewModel detailViewModel = HelperClass.getSingleModelFromJson(UserDetailViewModel.class, returnData);
@@ -181,6 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                 MessageDisplay.getInstance().showErrorToast(new ReturnModel().getGlobalErrorMessage().getMessage(), getApplication());
                 alertDialog.cancel();
             }
+
         });
     }
 

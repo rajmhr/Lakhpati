@@ -18,10 +18,6 @@
             android:id="@+id/nav_return"
             android:icon="@drawable/img_payment"
             android:title="Return Coin" />
-        <item
-            android:id="@+id/nav_lakhpatiOpen"
-            android:icon="@drawable/img_lakhpati"
-            android:title="Lakhpati (In future)" />
     </group>
 
     <item android:title="Communicate">

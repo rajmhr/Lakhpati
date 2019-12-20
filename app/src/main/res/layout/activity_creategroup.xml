@@ -5,28 +5,23 @@
     android:orientation="vertical"
     android:paddingTop="20dp">
 
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="start"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:paddingStart="50dp"
         android:paddingEnd="50dp">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/createGroup_txtGroupName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="Please enter your group name" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/createGroup_txtGroupName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="Please enter your group name" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,21 +32,21 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGroupCancel"
+            style="@style/DangerMaterialButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            style="@style/DangerMaterialButton"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGroupCreate"
+            style="@style/SuccessMaterialButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Create"
             android:textAllCaps="false"
-            style="@style/SuccessMaterialButton"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
     </LinearLayout>
 </LinearLayout>

@@ -77,9 +77,10 @@
 
     </style>
 
-    <style name="LoginTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="LoginTheme" parent="AppThemeLakhpati">
         <!-- ... -->
         <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="MyMaterialTheme.Base" parent="Theme.MaterialComponents.Light">

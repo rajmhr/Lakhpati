@@ -2,10 +2,9 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="left"
     android:layout_gravity="center"
     android:layout_margin="5dp"
-    >
+    android:gravity="left">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view_liveDraw"
@@ -23,22 +22,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/txt_buyerInfo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="2dp">
-
-                <TextView
-                    android:id="@+id/txt_buyerInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Raj Maharjan (raj.maharjan151@gmail.com)"
-                    android:textSize="12dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:layout_gravity="center"
+                android:text="xxx xxxxxxxx (xxx.xxxxxxxx@gmail.com)"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12dp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
-                    android:text="11 22 33 44 55"
+                    android:text="xx xx xx xx xx"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -66,7 +58,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="purchased on july 13 2019"
+                    android:text="purchased on xxxxxx"
                     android:textColor="@color/colorPrimary"
                     android:textSize="10sp"
                     android:textStyle="bold" />
