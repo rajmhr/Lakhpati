@@ -1,25 +1,21 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pullToRefresh_drawStarted"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    android:orientation="vertical">
+    android:background="@color/fair_blue"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="0.65"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_view_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="@color/light_sky"
+            card_view:cardBackgroundColor="@color/white"
             card_view:cardCornerRadius="6dp"
             card_view:cardElevation="4dp"
             card_view:cardMaxElevation="6dp"
@@ -28,75 +24,182 @@
             card_view:contentPaddingRight="25dp"
             card_view:contentPaddingTop="15dp">
 
-
-            <TextView
-                android:id="@+id/txt_live_ticket"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_weight="0.65"
                 android:gravity="center"
-                android:text="Starting live lucky draw"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                 />
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    card_view:cardBackgroundColor="@color/light_sky"
+                    card_view:cardCornerRadius="6dp"
+                    card_view:cardElevation="4dp"
+                    card_view:cardMaxElevation="6dp"
+                    card_view:contentPaddingBottom="15dp"
+                    card_view:contentPaddingLeft="25dp"
+                    card_view:contentPaddingRight="25dp"
+                    card_view:contentPaddingTop="15dp">
+
+
+                    <TextView
+                        android:id="@+id/txt_live_ticket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Starting live draw"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                </androidx.cardview.widget.CardView>
+
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/img_loader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/awesome_loader" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_view_liveDraw"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        card_view:cardBackgroundColor="@color/colorPrimary"
+                        card_view:cardCornerRadius="6dp"
+                        card_view:cardElevation="4dp"
+                        card_view:cardMaxElevation="6dp"
+                        card_view:contentPadding="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_buyerInfo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="xxx xxxxxxxx (xxx.xxxxxxxx@gmail.com)"
+                                android:textColor="@color/white"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/txt_ticketNo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="xx xx xx xx xx"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+
+                                <TextView
+                                    android:id="@+id/txt_purchasedDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginTop="5dp"
+                                    android:gravity="center"
+                                    android:text="purchased on xxxxxx"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/img_loader"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/loading_animation" />
-
-        <include
-            layout="@layout/fragment_groupluckydraw_drawstarted_listitem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-        </include>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_weight="0.35"
-        android:orientation="vertical">
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/light_orange"
-        card_view:cardCornerRadius="6dp"
-        card_view:cardElevation="4dp"
-        card_view:cardMaxElevation="6dp"
-        card_view:contentPaddingBottom="5dp"
-        card_view:contentPaddingLeft="5dp"
-        card_view:contentPaddingRight="5dp"
-        card_view:contentPaddingTop="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
+            android:layout_weight="0.35"
             android:orientation="vertical">
 
-            <TextView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="18dp"
-                android:text="Participating tickets.." />
+                card_view:cardBackgroundColor="@color/light_orange"
+                card_view:cardCornerRadius="6dp"
+                card_view:cardElevation="4dp"
+                card_view:cardMaxElevation="6dp"
+                card_view:contentPaddingBottom="5dp"
+                card_view:contentPaddingLeft="5dp"
+                card_view:contentPaddingRight="5dp"
+                card_view:contentPaddingTop="5dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/liveTickets_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Participating Tickets.."
+                            android:textColor="@color/purple"
+                            android:textSize="18dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_totalParticipatingTicket"
+                            style="@style/AppBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginStart="10dp"
+                            android:background="@color/light_orange"
+                            android:minWidth="15dp"
+                            android:text="0 Tickets"
+                            android:textAllCaps="false"></com.google.android.material.button.MaterialButton>
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/liveTickets_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp" />
 
 
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
     </LinearLayout>
-</LinearLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

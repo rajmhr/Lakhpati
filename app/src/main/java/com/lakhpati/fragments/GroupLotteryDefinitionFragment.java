@@ -267,48 +267,7 @@ public class GroupLotteryDefinitionFragment extends Fragment {
         GroupDetailActivity.groupDetailActivity.updateBottomNavigation(R.id.action_groupLuckdraw);
     }
 
-    private View initNewStatus(View view) {
-
-        SwipeRefreshLayout pullToRefresh_fresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh_fresh);
-        pullToRefresh_fresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                reloadFragment();
-                pullToRefresh_fresh.setRefreshing(false);
-            }
-        });
-
-        Button btn_deleteLottery = (Button) view.findViewById(R.id.btn_deleteLottery);
-        btn_deleteLottery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteGroupLottery();
-            }
-        });
-
-        Button btn_startLottery = (Button) view.findViewById(R.id.btn_startLottery);
-        btn_startLottery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startGroupLottery();
-            }
-        });
-        TextView txt_campaignName = (TextView) view.findViewById(R.id.txt_campaignName);
-        txt_campaignName.setText(myGroupDetailModel.getCampaignTitle());
-
-        TextView txt_period = (TextView) view.findViewById(R.id.txt_period);
-        txt_period.setText("Lottery will close on " + myGroupDetailModel.getPeriodEnd().toString().substring(0, 10));
-
-        TextView txt_betCoins = (TextView) view.findViewById(R.id.txt_betCoins);
-        txt_betCoins.setText("Bet coins : " + Integer.toString(myGroupDetailModel.getBetCoin()) + " coins.");
-
-        TextView txt_campaignStatus = (TextView) view.findViewById(R.id.txt_campaignStatus);
-        txt_campaignStatus.setText("Lottery status : " + myGroupDetailModel.getCampaignStatus());
-        return view;
-    }
-
-    private void startGroupLottery() {
+   /* private void startGroupLottery() {
         alertDialog.show();
 
         GroupCampaignApiInterface lotteryGroupCampaignApi = RetrofitClientInstance.getRetrofitInstance().create(GroupCampaignApiInterface.class);
@@ -334,7 +293,7 @@ public class GroupLotteryDefinitionFragment extends Fragment {
                 alertDialog.cancel();
             }
         });
-    }
+    }*/
 
     private void deleteGroupLottery() {
         alertDialog.show();

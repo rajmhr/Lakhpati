@@ -51,7 +51,7 @@ public class LoadCoinActivity extends AppCompatActivity {
     TextInputEditText editText_transferCoin;
 
     @BindView(R.id.khalti_button)
-    AppCompatButton khalti_button;
+    MaterialButton khalti_button;
 
     @BindView(R.id.btn_transfer_coin)
     MaterialButton btn_transfer_coin;

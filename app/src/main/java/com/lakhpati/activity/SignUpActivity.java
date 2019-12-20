@@ -87,7 +87,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void createAccount(String email, String password, String displayName) {
         alertDialog.show();
-
+        _signupButton.setEnabled(false);
         UserApiInterface userApiService = RetrofitClientInstance.getRetrofitInstance().create(UserApiInterface.class);
 
         UserRegisterModel model = new UserRegisterModel();
@@ -99,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
         callValue.enqueue(new Callback<ReturnModel>() {
             @Override
             public void onResponse(Call<ReturnModel> call, Response<ReturnModel> response) {
-
+                _signupButton.setEnabled(true);
                 if (response.body().isSuccess()) {
                     String returnData = response.body().getReturnData();
                     MessageDisplay.getInstance().showSuccessToast("Your account has created. Please verify your account.", getApplication());

@@ -32,7 +32,6 @@
         <activity
             android:name=".activity.LoadCoinActivity"
             android:label="@string/title_activity_load_coin" />
-        <activity android:name=".activity.MyPrizeMoneyActivity" />
         <activity android:name=".activity.UserProfileActivity" />
         <activity
             android:name=".activity.GroupDetailActivity"
@@ -56,7 +55,7 @@
             android:theme="@style/DrawerTheme" />
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/LoginTheme" />
 
         <service
             android:name=".internalService.SignalRChatService"

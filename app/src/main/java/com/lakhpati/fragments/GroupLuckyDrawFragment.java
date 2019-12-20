@@ -1,48 +1,38 @@
 package com.lakhpati.fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.lakhpati.R;
 import com.lakhpati.Services.GroupCampaignApiInterface;
 import com.lakhpati.Services.MyTicketsApiInterface;
 import com.lakhpati.Utilities.CheckConnection;
 import com.lakhpati.Utilities.EnumCollection;
-import com.lakhpati.Utilities.HelperAsyncClass;
 import com.lakhpati.Utilities.HelperClass;
 import com.lakhpati.Utilities.MessageDisplay;
 import com.lakhpati.activity.DrawerActivity;
 import com.lakhpati.activity.GroupDetailActivity;
 import com.lakhpati.adapters.LiveDrawListTicketsAdapter;
-import com.lakhpati.internalService.SignalRChatService;
 import com.lakhpati.internalService.SignalRSingleton;
 import com.lakhpati.models.AllUserTicketViewModel;
 import com.lakhpati.models.LotteryGroupCampaignDetailModel;
-import com.lakhpati.models.LotteryGroupModel;
 import com.lakhpati.models.LuckyDrawHubResultModel;
 import com.lakhpati.models.LuckyDrawViewModel;
 import com.lakhpati.models.ReturnModel;
 import com.lakhpati.retrofit.RetrofitClientInstance;
-import com.microsoft.signalr.HubConnection;
-import com.microsoft.signalr.HubConnectionBuilder;
 import com.microsoft.signalr.HubConnectionState;
 
 import java.util.ArrayList;
@@ -67,8 +57,10 @@ public class GroupLuckyDrawFragment extends Fragment {
     MaterialButton btn_backto_create_lottery;
 
     private CardView card_view_liveDraw;
+    private SwipeRefreshLayout pullToRefresh_drawStarted;
 
     private RecyclerView liveTickets_recycler_view;
+    private MaterialButton btn_totalParticipatingTicket;
     private TextView txt_live_ticket;
     private GifImageView img_loader;
 
@@ -123,7 +115,7 @@ public class GroupLuckyDrawFragment extends Fragment {
             txt_description.setText("Please create lottery to proceed.");
         } else if (myGroupDetailModel.getCampaignStatus().trim().equals(EnumCollection.CampaignStatus.Completed.toString())) {
             txt_intro.setText("Congratulation!! You have recently completed lottery. ");
-            txt_description.setText("Please create another one to proceed.");
+            txt_description.setText("Create Lottery to proceed.");
         } else if (myGroupDetailModel.getCampaignStatus().trim().equals(EnumCollection.CampaignStatus.InProgress.toString())) {
             txt_intro.setText("Lottery is in progress!!");
             txt_description.setText("Change lottery status to 'Stopped', live lottery will be available. ");
@@ -173,12 +165,12 @@ public class GroupLuckyDrawFragment extends Fragment {
                     AllUserTicketViewModel model = listTicketsAdapter.getTicketItemByTicket(ticketNo.trim());
                     if (model != null) {
                         txt_ticketNo.setText(model.getTicketNo());
-                        txt_purchasedDate.setText(model.getPurchasedDate().toString());
+                        txt_purchasedDate.setText(model.getPurchasedDate().toString().substring(0, 10));
                         txt_buyerInfo.setText(model.getDisplayName() + " ( " + model.getEmailId() + " ) ");
-                        listTicketsAdapter.swapItem(ticketNo.trim(), 0);
-                        if (((LinearLayoutManager) (liveTickets_recycler_view.getLayoutManager())).findFirstVisibleItemPosition() != 0) {
+                        //listTicketsAdapter.swapItem(ticketNo.trim(), 0);
+                       /* if (((LinearLayoutManager) (liveTickets_recycler_view.getLayoutManager())).findFirstVisibleItemPosition() != 0) {
                             liveTickets_recycler_view.smoothScrollToPosition(0);
-                        }
+                        }*/
                     }
                 }
             }
@@ -189,7 +181,7 @@ public class GroupLuckyDrawFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                img_loader.setVisibility(View.GONE);
+                img_loader.setImageResource(R.drawable.congrats);
                 txt_live_ticket.setText("Congratulation !!!");
             }
         });
@@ -197,6 +189,7 @@ public class GroupLuckyDrawFragment extends Fragment {
 
     private void initDrawStarted(View view) {
         liveTickets_recycler_view = view.findViewById(R.id.liveTickets_recycler_view);
+        btn_totalParticipatingTicket = view.findViewById(R.id.btn_totalParticipatingTicket);
         txt_live_ticket = view.findViewById(R.id.txt_live_ticket);
         img_loader = view.findViewById(R.id.img_loader);
         txt_ticketNo = view.findViewById(R.id.txt_ticketNo);
@@ -204,6 +197,15 @@ public class GroupLuckyDrawFragment extends Fragment {
         txt_buyerInfo = view.findViewById(R.id.txt_buyerInfo);
         card_view_liveDraw = view.findViewById(R.id.card_view_liveDraw);
         card_view_liveDraw.setCardBackgroundColor(getResources().getColor(R.color.light_green));
+        pullToRefresh_drawStarted = view.findViewById(R.id.pullToRefresh_drawStarted);
+        pullToRefresh_drawStarted.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pullToRefresh_drawStarted.setRefreshing(false);
+                reloadFragment();
+            }
+        });
+
         initParticipatingList();
         getParticipatingTickets();
     }
@@ -302,7 +304,7 @@ public class GroupLuckyDrawFragment extends Fragment {
     private void populateRecycleView(String returnData) {
         List<AllUserTicketViewModel> models = HelperClass.getListModelFromJson(new TypeToken<List<AllUserTicketViewModel>>() {
         }.getType(), returnData);
-
+        btn_totalParticipatingTicket.setText(String.format("%d Tickets", models.size()));
         listTicketsAdapter.addItems(models);
         listTicketsAdapter.notifyDataSetChanged();
     }
