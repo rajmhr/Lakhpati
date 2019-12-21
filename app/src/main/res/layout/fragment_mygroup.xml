@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        app:cardBackgroundColor="@color/base"
+        app:cardBackgroundColor="@color/light_grey"
         app:cardCornerRadius="10dp"
         app:cardUseCompatPadding="false">
 
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:queryHint="Search your group here.."
-            android:theme="@style/SearchViewStyle" />
+             />
     </androidx.cardview.widget.CardView>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -31,7 +31,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myGroup_recycler_view"
-            style="@style/SearchViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layoutAnimation="@anim/layout_animation_fall_down" />

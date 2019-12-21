@@ -357,7 +357,7 @@ public class DrawerActivity extends AppCompatActivity
     private void addLotteryGroup() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         // Set title, icon, can not cancel properties.
-        alertDialogBuilder.setTitle("Create group!");
+        alertDialogBuilder.setTitle("Create Group !!");
         alertDialogBuilder.setIcon(R.drawable.add);
         alertDialogBuilder.setCancelable(false);
 

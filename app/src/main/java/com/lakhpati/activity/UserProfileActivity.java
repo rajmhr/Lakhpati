@@ -52,7 +52,7 @@ public class UserProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_user_profile);
         ButterKnife.bind(this);
-        setTitle("My profile");
+        setTitle("My Profile");
         alertDialog = Dialogs.getInstance().initLoaderDialog(this);
         getUserProfileData();
     }

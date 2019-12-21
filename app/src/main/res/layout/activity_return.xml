@@ -4,14 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
     tools:context=".activity.ReturnActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view_loadCoin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        card_view:cardBackgroundColor="@color/cardview_shadow_end_color"
+        card_view:cardBackgroundColor="@color/base"
         card_view:cardCornerRadius="6dp"
         card_view:cardElevation="4dp"
         card_view:cardMaxElevation="6dp"
@@ -24,19 +27,21 @@
             android:gravity="center"
             android:orientation="vertical">
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="GET RETURN YOUR COINS"
-                android:textColor="@color/black"
+                android:textColor="@color/purple"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="( This will transfer money to your account )"
-                android:textColor="@color/black"
-                android:textSize="10sp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
                 android:textStyle="italic" />
 
             <LinearLayout

@@ -67,7 +67,7 @@ public class CoinTransactionActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Transaction summary");
+        setTitle("Transaction Summary");
         initListAdapter();
         offset = 0;
         alertDialog = Dialogs.getInstance().initLoaderDialog(this);

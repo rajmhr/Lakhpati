@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:cardBackgroundColor="@color/cardview_shadow_end_color"
+        card_view:cardBackgroundColor="@color/cardview_shadow_start_color"
         card_view:cardCornerRadius="6dp"
         card_view:cardElevation="4dp"
         card_view:cardMaxElevation="6dp"
@@ -33,7 +33,7 @@
                 android:layout_gravity="center"
                 android:gravity="right"
                 android:text="50 coins remaining "
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
             <TextView
@@ -52,15 +52,15 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="On 2019/12/12 "
-                android:textColor="@color/black" />
+                android:textColor="@color/primaryText" />
 
             <TextView
                 android:id="@+id/txt_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="By raj.maharjan151@gmail.com"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/black"
                 android:textStyle="italic" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

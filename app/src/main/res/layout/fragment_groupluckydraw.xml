@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fair_blue"
+    android:background="@color/white"
     android:gravity="center"
     android:padding="10dp"
     android:orientation="vertical"
@@ -64,7 +64,7 @@
                 android:text="Get me back to lottery create screen."
                 android:gravity="center"
                 style="@style/NormalMaterialButton"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:padding="15dp"
                 android:textAllCaps="false"
                 />

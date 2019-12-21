@@ -5,7 +5,7 @@
         android:id="@+id/pullToRefresh_noCampaign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/fair_blue"
+        android:background="@color/white"
         android:layout_gravity="center">
 
         <LinearLayout
