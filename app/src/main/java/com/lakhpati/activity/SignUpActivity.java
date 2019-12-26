@@ -1,16 +1,12 @@
 package com.lakhpati.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,12 +15,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.lakhpati.R;
 import com.lakhpati.Services.UserApiInterface;
 import com.lakhpati.Utilities.Dialogs;
-import com.lakhpati.Utilities.HelperClass;
-import com.lakhpati.Utilities.LoginPreference;
 import com.lakhpati.Utilities.MessageDisplay;
-import com.lakhpati.models.LoginModel;
 import com.lakhpati.models.ReturnModel;
-import com.lakhpati.models.UserDetailViewModel;
 import com.lakhpati.models.UserRegisterModel;
 import com.lakhpati.retrofit.RetrofitClientInstance;
 

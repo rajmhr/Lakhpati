@@ -42,7 +42,7 @@
                 android:background="@color/white"
                 android:gravity="center"
                 android:hint="Enter your email id."
-                android:text="raj.maharjan151@gmail.com" />
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--  Password Label -->
@@ -62,7 +62,7 @@
                 android:gravity="center"
                 android:hint="Enter your password."
                 android:inputType="textPassword"
-                android:text="111111" />
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.lakhpati.Services.Interceptor.NetworkConnectionInterceptor;
 import com.lakhpati.Services.InternetConnectionListener;
-import com.lakhpati.Utilities.CheckConnection;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,10 +19,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClientInstance extends Application {
 
     private static Retrofit retrofit;
-    public static final String BASE_URL = "http://192.168.100.101/Lakhpati.Api/api/";
-    public static final String BASE_HUB_URL = "http://192.168.100.101/Lakhpati.Api/";
-    /*public static final String BASE_URL = "http://api-lakhpati.kbits.com.np/api/";
-    public static final String BASE_HUB_URL = "http://api-lakhpati.kbits.com.np/";*/
+    //    public static final String BASE_URL = "http://192.168.100.101/Lakhpati.Api/api/";
+//    public static final String BASE_HUB_URL = "http://192.168.100.101/Lakhpati.Api/";
+    public static final String BASE_URL = "http://api-lakhpati.kbits.com.np/api/";
+    public static final String BASE_HUB_URL = "http://api-lakhpati.kbits.com.np/";
 
     private static InternetConnectionListener mInternetConnectionListener;
     private static RetrofitClientInstance instance;

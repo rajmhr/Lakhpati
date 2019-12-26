@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,9 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -36,29 +33,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.infideap.drawerbehavior.AdvanceDrawerLayout;
 import com.infideap.drawerbehavior.BuildConfig;
 import com.lakhpati.R;
 import com.lakhpati.Services.InternetConnectionListener;
 import com.lakhpati.Services.MyGroupApiInterface;
-import com.lakhpati.Services.UserApiInterface;
-import com.lakhpati.Services.UserMessageApiInterface;
 import com.lakhpati.Utilities.Dialogs;
 import com.lakhpati.Utilities.HelperClass;
-import com.lakhpati.Utilities.LoginPreference;
+import com.lakhpati.Utilities.Preferences;
 import com.lakhpati.Utilities.MyGroupPreference;
-import com.lakhpati.adapters.AllUserTicketsAdapter;
 import com.lakhpati.adapters.MyGroupRecyclerAdapter;
 import com.lakhpati.adapters.NotificationAdapter;
 import com.lakhpati.internalService.SignalRChatService;
-import com.lakhpati.models.AllUserTicketViewModel;
-import com.lakhpati.models.CoinHistoryModel;
 import com.lakhpati.models.LoginModel;
 import com.lakhpati.models.LotteryGroupModel;
-import com.lakhpati.models.NotificationModel;
 import com.lakhpati.models.NotificationSpModel;
 import com.lakhpati.models.RelatedLotteryGroupModel;
 import com.lakhpati.models.ReturnModel;
@@ -347,7 +336,7 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     private void clearLoginPreferences() {
-        LoginPreference preference = new LoginPreference(getApplicationContext());
+        Preferences preference = new Preferences(getApplicationContext());
         preference.clearLoginPreferences();
         Toast.makeText(getBaseContext(), "User logged out.", Toast.LENGTH_LONG).show();
         Intent loginIntent = new Intent(DrawerActivity.this, LoginActivity.class);
@@ -465,8 +454,8 @@ public class DrawerActivity extends AppCompatActivity
         alertDialog.show();
         MyGroupApiInterface userApiService = RetrofitClientInstance.getRetrofitInstance().create(MyGroupApiInterface.class);
 
-        LoginPreference loginPreference = new LoginPreference(this);
-        LoginModel lModel = loginPreference.getLoginPreferences();
+        Preferences preferences = new Preferences(this);
+        LoginModel lModel = preferences.getLoginPreferences();
 
         LotteryGroupModel model = new LotteryGroupModel();
         model.setName(groupName.getText().toString());

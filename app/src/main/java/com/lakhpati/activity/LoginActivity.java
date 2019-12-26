@@ -1,49 +1,31 @@
 package com.lakhpati.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.UserDictionary;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.lakhpati.R;
 import com.lakhpati.Services.UserApiInterface;
 import com.lakhpati.Utilities.Dialogs;
 import com.lakhpati.Utilities.EnumCollection;
-import com.lakhpati.Utilities.HelperAsyncClass;
 import com.lakhpati.Utilities.HelperClass;
-import com.lakhpati.Utilities.LoginPreference;
+import com.lakhpati.Utilities.Preferences;
 import com.lakhpati.Utilities.MessageDisplay;
-import com.lakhpati.customControl.ProgressLoader;
-import com.lakhpati.internalService.SignalRChatService;
 import com.lakhpati.models.LoginModel;
-import com.lakhpati.models.RelatedLotteryGroupModel;
 import com.lakhpati.models.ReturnModel;
 import com.lakhpati.models.UserDetailViewModel;
 import com.lakhpati.retrofit.RetrofitClientInstance;
-
-import java.lang.reflect.Modifier;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -88,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void tryLoginWithPreferences() {
-        LoginPreference preference = new LoginPreference(this);
+        Preferences preference = new Preferences(this);
         LoginModel model = preference.getLoginPreferences();
         if (model != null && model.getEmail() != null) {
             UserDetailViewModel detailViewModel = new UserDetailViewModel();
@@ -168,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         finish();
                         startApplication(detailViewModel);
-                        new LoginPreference(getApplicationContext()).setLoginPreference(detailViewModel.getDisplayName(), detailViewModel.getEmailId(),
+                        new Preferences(getApplicationContext()).setLoginPreference(detailViewModel.getDisplayName(), detailViewModel.getEmailId(),
                                 detailViewModel.getUserDetailId());
                     }
 
@@ -178,6 +160,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ReturnModel> call, Throwable t) {
+                btn_login.setEnabled(true);
                 MessageDisplay.getInstance().showErrorToast(new ReturnModel().getGlobalErrorMessage().getMessage(), getApplication());
                 alertDialog.cancel();
             }

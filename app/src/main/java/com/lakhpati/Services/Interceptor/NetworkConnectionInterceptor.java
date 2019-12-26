@@ -1,5 +1,7 @@
 package com.lakhpati.Services.Interceptor;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -13,6 +15,7 @@ public abstract class NetworkConnectionInterceptor implements Interceptor {
 
     public abstract void onInternetUnavailable();
 
+    @NotNull
     @Override
     public Response intercept(Interceptor.Chain chain) throws IOException {
         Request request = chain.request();

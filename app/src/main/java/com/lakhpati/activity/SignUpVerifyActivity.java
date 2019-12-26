@@ -15,7 +15,7 @@ import com.lakhpati.R;
 import com.lakhpati.Services.UserApiInterface;
 import com.lakhpati.Utilities.Dialogs;
 import com.lakhpati.Utilities.HelperClass;
-import com.lakhpati.Utilities.LoginPreference;
+import com.lakhpati.Utilities.Preferences;
 import com.lakhpati.Utilities.MessageDisplay;
 import com.lakhpati.models.LoginModel;
 import com.lakhpati.models.ReturnModel;
@@ -122,7 +122,7 @@ public class SignUpVerifyActivity extends AppCompatActivity {
                     UserDetailViewModel detailViewModel = HelperClass.getSingleModelFromJson(UserDetailViewModel.class, returnData);
 
                     startApplication(detailViewModel);
-                    new LoginPreference(getApplicationContext()).setLoginPreference(detailViewModel.getDisplayName(), detailViewModel.getEmailId(),
+                    new Preferences(getApplicationContext()).setLoginPreference(detailViewModel.getDisplayName(), detailViewModel.getEmailId(),
                             detailViewModel.getUserDetailId());
 
                 }
