@@ -11,6 +11,15 @@ public class UserLotterySummaryModel {
     private int UserDetailId;
     private String EmailId;
     private String DisplayName;
+    private double Coins;
+
+    public double getCoins() {
+        return Coins;
+    }
+
+    public void setCoins(double coins) {
+        Coins = coins;
+    }
 
     public int getTotalGamePlayed() {
         return TotalGamePlayed;

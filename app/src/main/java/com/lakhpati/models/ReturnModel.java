@@ -11,6 +11,13 @@ public class ReturnModel {
         return  this;
     }
 
+    public ReturnModel getServerErrorMessage(){
+        setSuccess(false);
+        setMessage("Your server is currently under maintenance. Please try later.");
+        return  this;
+    }
+
+
     public boolean isSuccess() {
         return success;
     }

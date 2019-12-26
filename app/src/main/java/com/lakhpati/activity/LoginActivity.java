@@ -46,6 +46,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
+
+    //region Fields and Declaration
     private static final String TAG = "LoginActivity";
 
     @BindView(R.id.input_email)
@@ -62,6 +64,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private AlertDialog alertDialog;
 
+    //endregion
+
+    //region Native methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +91,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the MainActivity
+        moveTaskToBack(true);
+    }
+    //endregion
 
+    //region Private Methods
     private void tryLoginWithPreferences() {
         LoginPreference preference = new LoginPreference(this);
         LoginModel model = preference.getLoginPreferences();
@@ -107,25 +119,16 @@ public class LoginActivity extends AppCompatActivity {
         LoginActivity.this.startActivity(drawerIntent);
     }
 
-
-    @Override
-    public void onBackPressed() {
-        // Disable going back to the MainActivity
-        moveTaskToBack(true);
-    }
-
-    public void login() {
+    private void login() {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (!validate(email, password))
+        if (!validateCredential(email, password))
             return;
-
-
         loginToServer(email, password);
     }
 
-    private boolean validate(String email, String password) {
+    private boolean validateCredential(String email, String password) {
         boolean valid = true;
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -159,6 +162,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ReturnModel> call, Response<ReturnModel> response) {
                 btn_login.setEnabled(true);
+                if(response == null){
+                    MessageDisplay.getInstance().showErrorToast(new ReturnModel().getServerErrorMessage().getMessage(), getApplication());
+                    return;
+                }
                 if (response.body().isSuccess()) {
                     String returnData = response.body().getReturnData();
                     UserDetailViewModel detailViewModel = HelperClass.getSingleModelFromJson(UserDetailViewModel.class, returnData);
@@ -172,6 +179,9 @@ public class LoginActivity extends AppCompatActivity {
                                 detailViewModel.getUserDetailId());
                     }
 
+                }
+                else{
+                    MessageDisplay.getInstance().showErrorToast(response.body().getMessage(), getApplication());
                 }
                 alertDialog.cancel();
             }
@@ -191,4 +201,5 @@ public class LoginActivity extends AppCompatActivity {
         signUpVerify.putExtra("password", detailViewModel.getPassword());
         LoginActivity.this.startActivity(signUpVerify);
     }
+    //endregion
 }

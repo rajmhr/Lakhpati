@@ -29,6 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserProfileActivity extends AppCompatActivity {
+    //region Fields and Declaration
     @BindView(R.id.txt_user_profile_name)
     TextView txt_user_profile_name;
 
@@ -41,10 +42,17 @@ public class UserProfileActivity extends AppCompatActivity {
     @BindView(R.id.txt_totalGameWon)
     TextView txt_totalGameWon;
 
+    @BindView(R.id.txt_totalCoins)
+    TextView txt_totalCoins;
+
     @BindView(R.id.txt_totalCoinWon)
     TextView txt_totalCoinWon;
 
     AlertDialog alertDialog;
+
+    //endregion
+
+    //region Native Method
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,35 +73,10 @@ public class UserProfileActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    //endregion
 
-    /*private void getUserProfileData() {
-        alertDialog.show();
+    //region Private Method
 
-        UserApiInterface userApiService = RetrofitClientInstance.getRetrofitInstance().create(UserApiInterface.class);
-
-        Call<ReturnModel> callValue = userApiService.getUserProfileData(4);
-        callValue.enqueue(new Callback<ReturnModel>() {
-            @Override
-            public void onResponse(Call<ReturnModel> call, Response<ReturnModel> response) {
-
-                if (response.body().isSuccess()) {
-                    String returnData = response.body().getReturnData();
-                    Gson gson = new GsonBuilder().create();
-                    UserProfileViewModel userProfileViewModel = gson.fromJson(returnData, UserProfileViewModel.class);
-                    _userDisplayName.setText(userProfileViewModel.getUserDisplayName());
-                    _emailId.setText(userProfileViewModel.getEmailId());
-                    _noOfGroups.setText("No of Groups :" + userProfileViewModel.NoOfGroups);
-                }
-                alertDialog.cancel();
-            }
-
-            @Override
-            public void onFailure(Call<ReturnModel> call, Throwable t) {
-                MessageDisplay.getInstance().showErrorToast(new ReturnModel().getGlobalErrorMessage().getMessage(), getApplication());
-                alertDialog.cancel();
-            }
-        });
-    }*/
     private void getUserProfileData() {
         alertDialog.show();
         MyGroupApiInterface lotteryGroupApiService = RetrofitClientInstance.getRetrofitInstance().create(MyGroupApiInterface.class);
@@ -122,9 +105,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
         txt_user_profile_name.setText(myGroupModel.getDisplayName());
         txt_user_profile_email.setText(myGroupModel.getEmailId());
-
+        txt_totalCoins.setText(String.format("%.2f coins in balance", myGroupModel.getCoins()));
         txt_totalGamePlayed.setText("Game played : " + myGroupModel.getTotalGamePlayed() + " times.");
         txt_totalGameWon.setText("Total game won : " + myGroupModel.getTotalGameWon() + " times.");
         txt_totalCoinWon.setText("You have won : " + myGroupModel.getTotalCoinWon() + " coins.");
     }
+    //endregion
 }

@@ -77,6 +77,7 @@ import retrofit2.Response;
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, InternetConnectionListener {
 
+    //region Fields and Declaration
     View popupInputDialogView;
     EditText groupName;
 
@@ -122,7 +123,9 @@ public class DrawerActivity extends AppCompatActivity
     MaterialButton btnGroupCreate;
     MaterialButton btnGroupCancel;
     NotificationAdapter allUserTicketsAdapter;
+//endregion
 
+    //region Native Methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -215,25 +218,6 @@ public class DrawerActivity extends AppCompatActivity
         setupSearchView();
         loadMyGroups(false);
     }
-
-    private void initMyGroupAdapter() {
-        myGroupRecycleAdapter = new MyGroupRecyclerAdapter(myGroupModelList, this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        myGroup_recycler_view.setLayoutManager(mLayoutManager);
-        myGroup_recycler_view.setItemAnimator(new DefaultItemAnimator());
-        myGroup_recycler_view.setAdapter(myGroupRecycleAdapter);
-    }
-
-    private void setNavHeaderText() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = (TextView) headerView.findViewById(R.id.txt_navHeaderUserName);
-        TextView navUserEmail = (TextView) headerView.findViewById(R.id.txt_navHeaderUserEmail);
-        navUsername.setText(userCommonModel.getDisplayName());
-        navUserEmail.setText(userCommonModel.getEmailId());
-    }
-
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -270,23 +254,6 @@ public class DrawerActivity extends AppCompatActivity
 
         return super.onCreateOptionsMenu(menu);
     }
-
-    /*private void setupBadge() {
-
-        if (notification_badge != null) {
-            if (notificationCounter == 0) {
-                if (notification_badge.getVisibility() != View.GONE) {
-                    notification_badge.setVisibility(View.GONE);
-                }
-            } else {
-                notification_badge.setText(String.valueOf(Math.min(notificationCounter, 99)));
-                if (notification_badge.getVisibility() != View.VISIBLE) {
-                    notification_badge.setVisibility(View.VISIBLE);
-                }
-            }
-        }
-    }*/
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -299,7 +266,37 @@ public class DrawerActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    //Private Methods
+    @Override
+    public void onInternetUnavailable() {
+        Snackbar snackbar = Snackbar
+                .make(drawer, "No internet connection. Try later.", Snackbar.LENGTH_LONG);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        snackbar.setBackgroundTint(getResources().getColor(R.color.yellow_ring_color));
+        snackbar.show();
+        // MessageDisplay.getInstance().showErrorToast("Internet connection not available. Loading cache data.", this);
+    }
+    //endregion
+
+    //region Private Methods
+    private void initMyGroupAdapter() {
+        myGroupRecycleAdapter = new MyGroupRecyclerAdapter(myGroupModelList, this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        myGroup_recycler_view.setLayoutManager(mLayoutManager);
+        myGroup_recycler_view.setItemAnimator(new DefaultItemAnimator());
+        myGroup_recycler_view.setAdapter(myGroupRecycleAdapter);
+    }
+
+    private void setNavHeaderText() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.txt_navHeaderUserName);
+        TextView navUserEmail = (TextView) headerView.findViewById(R.id.txt_navHeaderUserEmail);
+        navUsername.setText(userCommonModel.getDisplayName());
+        navUserEmail.setText(userCommonModel.getEmailId());
+    }
 
     private void shareApp() {
         try {
@@ -405,7 +402,6 @@ public class DrawerActivity extends AppCompatActivity
         return true;
     }
 
-
     private void populateRecycleView(String returnData) {
         myGroupModelList = HelperClass.getListModelFromJson(new TypeToken<List<RelatedLotteryGroupModel>>() {
         }.getType(), returnData);
@@ -502,19 +498,6 @@ public class DrawerActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    public void onInternetUnavailable() {
-        Snackbar snackbar = Snackbar
-                .make(drawer, "No internet connection. Try later.", Snackbar.LENGTH_LONG);
-        // Changing action button text color
-        View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(R.id.snackbar_text);
-        textView.setTextColor(getResources().getColor(R.color.white));
-        snackbar.setBackgroundTint(getResources().getColor(R.color.yellow_ring_color));
-        snackbar.show();
-        // MessageDisplay.getInstance().showErrorToast("Internet connection not available. Loading cache data.", this);
-    }
-
     private void setUpNotificationAdapter() {
         allUserTicketsAdapter = new NotificationAdapter(new ArrayList<>(), this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -523,8 +506,5 @@ public class DrawerActivity extends AppCompatActivity
         notification_recycleView.setAdapter(allUserTicketsAdapter);
     }
 
-    private void displayNotification(List<NotificationSpModel> allNotification) {
-        allUserTicketsAdapter.addItems(allNotification);
-        allUserTicketsAdapter.notifyDataSetChanged();
-    }
+    //endregion
 }

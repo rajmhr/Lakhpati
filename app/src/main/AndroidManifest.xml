@@ -37,9 +37,9 @@
             android:name=".activity.GroupDetailActivity"
             android:launchMode="singleTask" />
 
-        <meta-data
+      <!--  <meta-data
             android:name="com.google.android.actions"
-            android:resource="@xml/network_security_config" />
+            android:resource="@xml/network_security_config" />-->
 
         <activity
             android:name=".activity.MainActivity"

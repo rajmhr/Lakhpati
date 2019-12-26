@@ -45,6 +45,7 @@ import retrofit2.Response;
 
 public class CoinTransactionActivity extends AppCompatActivity {
 
+    //region Fields and Declaration
     @BindView(R.id.recycleView_coinTransaction)
     RecyclerView recycleView_coinTransaction;
 
@@ -59,7 +60,9 @@ public class CoinTransactionActivity extends AppCompatActivity {
     private static final int offsetConst = 10;
     boolean isLoading = true;
     int loadLoop = 0;
+    //endregion
 
+    //region Native methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +109,9 @@ public class CoinTransactionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //endregion
+
+    //region Private Methods
     private void loadTransactionHistory() {
         alertDialog.show();
         UserTransactionApiInterface userTransactionApi = RetrofitClientInstance.getRetrofitInstance().create(UserTransactionApiInterface.class);
@@ -119,11 +125,17 @@ public class CoinTransactionActivity extends AppCompatActivity {
         callValue.enqueue(new Callback<ReturnModel>() {
             @Override
             public void onResponse(Call<ReturnModel> call, Response<ReturnModel> response) {
+                alertDialog.cancel();
+                if(response == null){
+                    MessageDisplay.getInstance().showErrorToast(new ReturnModel().getServerErrorMessage().getMessage(), getApplication());
+                    return;
+                }
 
                 if (response.body().isSuccess()) {
                     String returnData = response.body().getReturnData();
                     List<CoinHistoryModel> coinList = HelperClass.getListModelFromJson(new TypeToken<List<CoinHistoryModel>>() {
                     }.getType(), returnData);
+
                     if (isHistoryFirstEmptyLoaded(coinList)) {
                         layout_noItem.setVisibility(View.VISIBLE);
                         recycleView_coinTransaction.setVisibility(View.GONE);
@@ -140,9 +152,9 @@ public class CoinTransactionActivity extends AppCompatActivity {
                             isLoading = true;
                         }
                     }
-                } else
+                } else {
                     isLoading = false;
-                alertDialog.cancel();
+                }
                 loadLoop++;
             }
 
@@ -171,4 +183,5 @@ public class CoinTransactionActivity extends AppCompatActivity {
         recycleView_coinTransaction.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
+    //endregion
 }

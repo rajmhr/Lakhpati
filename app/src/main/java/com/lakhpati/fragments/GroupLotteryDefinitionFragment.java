@@ -3,6 +3,7 @@ package com.lakhpati.fragments;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -21,11 +22,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.lakhpati.R;
 import com.lakhpati.Services.GroupCampaignApiInterface;
-import com.lakhpati.Services.MyTicketsApiInterface;
 import com.lakhpati.Utilities.CheckConnection;
 import com.lakhpati.Utilities.Dialogs;
 import com.lakhpati.Utilities.EnumCollection;
@@ -53,6 +54,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GroupLotteryDefinitionFragment extends Fragment {
+
+    //region Fields and Declarations
     @BindView(R.id.txt_period)
     TextView txt_period;
 
@@ -74,7 +77,6 @@ public class GroupLotteryDefinitionFragment extends Fragment {
     @BindView(R.id.view_pager)
     ViewPager view_pager;
 
-    //create lottery declaration
     private static final int Date_id = 0;
     private static final int Time_id = 1;
 
@@ -107,6 +109,9 @@ public class GroupLotteryDefinitionFragment extends Fragment {
         return new GroupLotteryDefinitionFragment();
     }
 
+    //endregion
+
+    //region Native Methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +146,9 @@ public class GroupLotteryDefinitionFragment extends Fragment {
         view = initFragmentView(inflater, container);
         return view;
     }
+    //endregion
 
+    //region Private Method
     private View loadNewLotteryView(LayoutInflater inflater, ViewGroup container, boolean isAdmin) {
         View view;
         if (isAdmin) {
@@ -163,12 +170,15 @@ public class GroupLotteryDefinitionFragment extends Fragment {
     }
 
     private View initFragmentView(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.fragment_grouplotterydefination, container, false);
+        View view;
 
-        if (myGroupDetailModel.getCampaignStatus().trim().equals(EnumCollection.CampaignStatus.Completed.toString()) || myGroupDetailModel.getCampaignStatus().trim().equals("")) {
+        //for completed status
+        if (myGroupDetailModel.getCampaignStatus().trim().equals(EnumCollection.CampaignStatus.Completed.toString()) ||
+                myGroupDetailModel.getCampaignStatus().trim().equals("")) {
             view = loadNewLotteryView(inflater, container, myGroupDetailModel.isAdmin());
-            return view;
-        } else if (myGroupDetailModel.getCampaignStatus().trim().equals(EnumCollection.CampaignStatus.Stopped.toString())) {
+        }
+        //for stopped status
+        else if (myGroupDetailModel.getCampaignStatus().trim().equals(EnumCollection.CampaignStatus.Stopped.toString())) {
             view = inflater.inflate(R.layout.fragment_grouplotterydefination_stopped, container, false);
             MaterialButton btn_liveDraw = (MaterialButton) view.findViewById(R.id.btn_liveDraw);
             SwipeRefreshLayout pullToRefresh_stopped = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh_stopped);
@@ -185,8 +195,9 @@ public class GroupLotteryDefinitionFragment extends Fragment {
                     navigateToLiveDraw();
                 }
             });
-            return view;
-        } else if (myGroupDetailModel.getCampaignStatus().trim().equals(EnumCollection.CampaignStatus.DrawStarted.toString())) {
+        }
+        //for draw-started status
+        else if (myGroupDetailModel.getCampaignStatus().trim().equals(EnumCollection.CampaignStatus.DrawStarted.toString())) {
             view = inflater.inflate(R.layout.fragment_grouplotterydefination_drawstarted, container, false);
             MaterialButton btn_gotoLiveDraw = (MaterialButton) view.findViewById(R.id.btn_gotoLiveDraw);
             btn_gotoLiveDraw.setOnClickListener(new View.OnClickListener() {
@@ -203,97 +214,101 @@ public class GroupLotteryDefinitionFragment extends Fragment {
                     reloadFragment();
                 }
             });
-            return view;
         }
+
         //main view definition
-        view = inflater.inflate(R.layout.fragment_grouplotterydefination, container, false);
-        ButterKnife.bind(this, view);
+        else {
+            view = inflater.inflate(R.layout.fragment_grouplotterydefination, container, false);
+            ButterKnife.bind(this, view);
 
-        initLotteryDefinition();
-        setUpActionButtons(false);
+            initLotteryDefinition();
+            setUpActionButtons(false);
 
-        btn_deleteLottery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteGroupLottery();
-            }
-        });
+            btn_deleteLottery.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new MaterialAlertDialogBuilder(getActivity())
+                            .setTitle("Are you sure ?")
+                            .setMessage("This will delete your lottery.")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    deleteGroupLottery();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            }).show();
 
-        btn_stopLottery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopGroupLottery();
-            }
-        });
 
-        pullToRefresh_definition.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                reloadFragment();
-                pullToRefresh_definition.setRefreshing(false);
-            }
-        });
-        tabsAdapter = new LotteryDefinitionTabAdapter(getFragmentManager(), tab_layout.getTabCount(), getActivity());
-        view_pager.setAdapter(tabsAdapter);
-        view_pager.setOffscreenPageLimit(0);
-        //tab_layout.setupWithViewPager(view_pager);
+                }
+            });
 
-        tab_layout.setTabTextColors(
-                ContextCompat.getColor(getContext(), R.color.white),
-                ContextCompat.getColor(getContext(), R.color.black)
-        );
+            btn_stopLottery.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new MaterialAlertDialogBuilder(getActivity())
+                            .setTitle("Are you sure ?")
+                            .setMessage("Everybody done with ticket purchase? This will take you to live draw.")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    stopGroupLottery();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            }).show();
 
-        view_pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
-        tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                view_pager.setCurrentItem(tab.getPosition());
-            }
+                }
+            });
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+            pullToRefresh_definition.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    reloadFragment();
+                    pullToRefresh_definition.setRefreshing(false);
+                }
+            });
+            tabsAdapter = new LotteryDefinitionTabAdapter(getFragmentManager(), tab_layout.getTabCount(), getActivity());
+            view_pager.setAdapter(tabsAdapter);
+            view_pager.setOffscreenPageLimit(0);
 
-            }
+            tab_layout.setTabTextColors(
+                    ContextCompat.getColor(getContext(), R.color.white),
+                    ContextCompat.getColor(getContext(), R.color.black)
+            );
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            view_pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
+            tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    view_pager.setCurrentItem(tab.getPosition());
+                }
 
-            }
-        });
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+        }
         return view;
     }
 
     private void navigateToLiveDraw() {
         GroupDetailActivity.groupDetailActivity.updateBottomNavigation(R.id.action_groupLuckdraw);
     }
-
-   /* private void startGroupLottery() {
-        alertDialog.show();
-
-        GroupCampaignApiInterface lotteryGroupCampaignApi = RetrofitClientInstance.getRetrofitInstance().create(GroupCampaignApiInterface.class);
-
-        Call<ReturnModel> callValue = lotteryGroupCampaignApi.startGroupCampaign(myGroupDetailModel.getGroupCampaignId());
-        callValue.enqueue(new Callback<ReturnModel>() {
-            @Override
-            public void onResponse(Call<ReturnModel> call, Response<ReturnModel> response) {
-                String message = response.body().getMessage();
-
-                if (response.body().isSuccess()) {
-                    MessageDisplay.getInstance().showSuccessToast(message, getContext());
-                    reloadFragment();
-                } else {
-                    MessageDisplay.getInstance().showErrorToast(message, getContext());
-                }
-                alertDialog.cancel();
-            }
-
-            @Override
-            public void onFailure(Call<ReturnModel> call, Throwable t) {
-                MessageDisplay.getInstance().showErrorToast(new ReturnModel().getGlobalErrorMessage().getMessage(), getActivity());
-                alertDialog.cancel();
-            }
-        });
-    }*/
 
     private void deleteGroupLottery() {
         alertDialog.show();
@@ -368,16 +383,16 @@ public class GroupLotteryDefinitionFragment extends Fragment {
                     }
                 }
             });
-            txt_endTime = view.findViewById(R.id.txt_endTime);
+         /*   txt_endTime = view.findViewById(R.id.txt_endTime);
             txt_endDate = view.findViewById(R.id.txt_endDate);
 
             btn_enddate = view.findViewById(R.id.btn_enddate);
-            btn_endtime = view.findViewById(R.id.btn_endtime);
+            btn_endtime = view.findViewById(R.id.btn_endtime);*/
 
 
             edittxt_betCoins = view.findViewById(R.id.edittxt_betCoins);
             txt_lotteryTitle = view.findViewById(R.id.edittxt_lotteryTitle);
-            dateTimePickerSetting();
+           /* dateTimePickerSetting();*/
             initDefaultFields();
 
             String description = "Lottery round - " + (myGroupDetailModel.getRoundNumber() + 1);
@@ -394,8 +409,8 @@ public class GroupLotteryDefinitionFragment extends Fragment {
         Date newDate = calendar.getTime();
         String weekLaterDate = df.format(newDate);
 
-        txt_endDate.setText(weekLaterDate);
-        txt_endTime.setText("12:00 AM");
+   /*     txt_endDate.setText(weekLaterDate);
+        txt_endTime.setText("12:00 AM");*/
         edittxt_betCoins.setText("10");
     }
 
@@ -404,13 +419,13 @@ public class GroupLotteryDefinitionFragment extends Fragment {
         if (edittxt_betCoins.getText().toString().equals("")) {
             edittxt_betCoins.setError("Bet coin is required.");
             isValid = false;
-        } else if (txt_endDate.getText().toString().equals("")) {
+        } /*else if (txt_endDate.getText().toString().equals("")) {
             txt_endDate.setError("Lottery end date is required.");
             isValid = false;
         } else if (txt_endTime.getText().toString().equals("")) {
             txt_endTime.setError("Lottery end time is required.");
             isValid = false;
-        }
+        }*/
         return isValid;
     }
 
@@ -457,14 +472,14 @@ public class GroupLotteryDefinitionFragment extends Fragment {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("E, MMM d, yyyy HH:mm");
 
-        String startDateText = df.format(c);
-        Date sDate = df.parse(startDateText);
+/*        String startDateText = df.format(c);
+        Date sDate = df.parse(startDateText);*/
 
-        String endDateText = txt_endDate.getText().toString() + " " + txt_endTime.getText().toString();
-        Date eDate = df.parse(endDateText);
+      /*  String endDateText = txt_endDate.getText().toString() + " " + txt_endTime.getText().toString();
+        Date eDate = df.parse(endDateText);*/
 
-        model.setPeriodStart(sDate);
-        model.setPeriodEnd(eDate);
+       /* model.setPeriodStart(sDate);*/
+        /*model.setPeriodEnd(eDate);*/
         model.setRoundNumber(myGroupDetailModel.getRoundNumber() + 1);
         return model;
     }
@@ -576,7 +591,6 @@ public class GroupLotteryDefinitionFragment extends Fragment {
     };
 
     protected Dialog onCreateDialog(int id) {
-
         // Get the calander
         Calendar c = Calendar.getInstance();
 
@@ -606,6 +620,5 @@ public class GroupLotteryDefinitionFragment extends Fragment {
         }
         return null;
     }
-
-
+    //endregion
 }

@@ -21,6 +21,7 @@ import com.lakhpati.Services.GroupCampaignApiInterface;
 import com.lakhpati.Services.MyTicketsApiInterface;
 import com.lakhpati.Utilities.CheckConnection;
 import com.lakhpati.Utilities.EnumCollection;
+import com.lakhpati.Utilities.HelperAsyncClass;
 import com.lakhpati.Utilities.HelperClass;
 import com.lakhpati.Utilities.MessageDisplay;
 import com.lakhpati.activity.DrawerActivity;
@@ -29,6 +30,7 @@ import com.lakhpati.adapters.LiveDrawListTicketsAdapter;
 import com.lakhpati.internalService.SignalRSingleton;
 import com.lakhpati.models.AllUserTicketViewModel;
 import com.lakhpati.models.LotteryGroupCampaignDetailModel;
+import com.lakhpati.models.LotteryGroupModel;
 import com.lakhpati.models.LuckyDrawHubResultModel;
 import com.lakhpati.models.LuckyDrawViewModel;
 import com.lakhpati.models.ReturnModel;
@@ -167,10 +169,6 @@ public class GroupLuckyDrawFragment extends Fragment {
                         txt_ticketNo.setText(model.getTicketNo());
                         txt_purchasedDate.setText(model.getPurchasedDate().toString().substring(0, 10));
                         txt_buyerInfo.setText(model.getDisplayName() + " ( " + model.getEmailId() + " ) ");
-                        //listTicketsAdapter.swapItem(ticketNo.trim(), 0);
-                       /* if (((LinearLayoutManager) (liveTickets_recycler_view.getLayoutManager())).findFirstVisibleItemPosition() != 0) {
-                            liveTickets_recycler_view.smoothScrollToPosition(0);
-                        }*/
                     }
                 }
             }
@@ -309,8 +307,21 @@ public class GroupLuckyDrawFragment extends Fragment {
         listTicketsAdapter.notifyDataSetChanged();
     }
 
-    private void reloadFragment() {
+/*    private void reloadFragment() {
         GroupDetailActivity.commonFragmentModel.setCampaignStatus(EnumCollection.CampaignStatus.DrawStarted.toString());
+        Fragment frg = getFragmentManager().findFragmentById(R.id.frame_layout);
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
+    }*/
+
+    private void reloadFragment() {
+        LotteryGroupModel model = new LotteryGroupModel();
+        model.setUserDetailId(DrawerActivity.userCommonModel.getUserDetailId());
+        model.setGroupId(GroupDetailActivity.commonFragmentModel.getGroupId());
+
+        GroupDetailActivity.commonFragmentModel = HelperAsyncClass.loadGroupInfoByGroupId(model, getActivity());
         Fragment frg = getFragmentManager().findFragmentById(R.id.frame_layout);
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(frg);
