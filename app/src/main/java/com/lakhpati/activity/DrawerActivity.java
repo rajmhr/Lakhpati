@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,7 +25,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -44,17 +47,21 @@ import com.lakhpati.R;
 import com.lakhpati.Services.InternetConnectionListener;
 import com.lakhpati.Services.LotteryGroupApiInterface;
 import com.lakhpati.Services.MyGroupApiInterface;
+import com.lakhpati.Services.UserApiInterface;
+import com.lakhpati.Services.UserMessageApiInterface;
 import com.lakhpati.Utilities.Dialogs;
 import com.lakhpati.Utilities.HelperClass;
-import com.lakhpati.Utilities.LoginPreference;
+import com.lakhpati.Utilities.Preferences;
 import com.lakhpati.Utilities.MessageDisplay;
 import com.lakhpati.Utilities.MyGroupPreference;
+import com.lakhpati.adapters.AllUserTicketsAdapter;
 import com.lakhpati.adapters.MyGroupRecyclerAdapter;
 import com.lakhpati.adapters.NotificationAdapter;
 import com.lakhpati.internalService.SignalRChatService;
 import com.lakhpati.models.GroupMembersViewModel;
 import com.lakhpati.models.LoginModel;
 import com.lakhpati.models.LotteryGroupModel;
+import com.lakhpati.models.NotificationSpModel;
 import com.lakhpati.models.LotteryUserGroupViewModel;
 import com.lakhpati.models.RelatedLotteryGroupModel;
 import com.lakhpati.models.ReturnModel;
@@ -532,7 +539,7 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     private void clearLoginPreferences() {
-        LoginPreference preference = new LoginPreference(getApplicationContext());
+        Preferences preference = new Preferences(getApplicationContext());
         preference.clearLoginPreferences();
         Toast.makeText(getBaseContext(), "User logged out.", Toast.LENGTH_LONG).show();
         Intent loginIntent = new Intent(DrawerActivity.this, LoginActivity.class);
@@ -574,12 +581,12 @@ public class DrawerActivity extends AppCompatActivity
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         popupInputDialogView = layoutInflater.inflate(R.layout.activity_creategroup, null);
         groupName = (TextInputEditText) popupInputDialogView.findViewById(R.id.createGroup_txtGroupName);
-        btnGroupCreate = popupInputDialogView.findViewById(R.id.btnGroupCreate);
-        btnGroupCancel = popupInputDialogView.findViewById(R.id.btnGroupCancel);
+        btnGroupCreate = (MaterialButton) popupInputDialogView.findViewById(R.id.btnGroupCreate);
+        btnGroupCancel = (MaterialButton) popupInputDialogView.findViewById(R.id.btnGroupCancel);
     }
 
     private boolean validateCreateGroup() {
-        if (groupName.getText().toString().equals("")) {
+        if (groupName.getText().toString() == "") {
             groupName.setError("Please enter group name.");
             return false;
         }
@@ -649,8 +656,8 @@ public class DrawerActivity extends AppCompatActivity
         alertDialog.show();
         MyGroupApiInterface userApiService = RetrofitClientInstance.getRetrofitInstance().create(MyGroupApiInterface.class);
 
-        LoginPreference loginPreference = new LoginPreference(this);
-        LoginModel lModel = loginPreference.getLoginPreferences();
+        Preferences preferences = new Preferences(this);
+        LoginModel lModel = preferences.getLoginPreferences();
 
         LotteryGroupModel model = new LotteryGroupModel();
         model.setName(groupName.getText().toString());
@@ -678,6 +685,7 @@ public class DrawerActivity extends AppCompatActivity
                 }
                 alertDialog.cancel();
             }
+
             @Override
             public void onFailure(Call<ReturnModel> call, Throwable t) {
                 alertDialog.cancel();
@@ -692,5 +700,6 @@ public class DrawerActivity extends AppCompatActivity
         notification_recycleView.setItemAnimator(new DefaultItemAnimator());
         notification_recycleView.setAdapter(allUserTicketsAdapter);
     }
+
     //endregion
 }
