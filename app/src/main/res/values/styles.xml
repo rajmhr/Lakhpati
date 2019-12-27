@@ -74,7 +74,6 @@
     </style>
 
     <style name="AppThemeLakhpati" parent="MyMaterialTheme.Base">
-        <item name="android:textColorHint">@color/white</item>
     </style>
 
     <style name="LoginTheme" parent="AppThemeLakhpati">
