@@ -1,13 +1,16 @@
 package com.lakhpati.adapters;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,10 +29,11 @@ public class MyGroupRecyclerAdapter extends RecyclerView.Adapter<MyGroupRecycler
 
     private List<RelatedLotteryGroupModel> myGroupList;
     private List<RelatedLotteryGroupModel> orgMyGroupList;
-    Context context;
+    Activity context;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         private TextView grpName, notification_badge;
+        private RelativeLayout myGroupListItem_layout;
         MaterialButton btn_inviteStatus;
         private ImageView userImg;
 
@@ -39,10 +43,31 @@ public class MyGroupRecyclerAdapter extends RecyclerView.Adapter<MyGroupRecycler
             btn_inviteStatus = view.findViewById(R.id.btn_inviteStatus);
             userImg = view.findViewById(R.id.img_user);
             notification_badge = view.findViewById(R.id.notification_badge);
+            myGroupListItem_layout = view.findViewById(R.id.myGroupListItem_layout);
+            myGroupListItem_layout.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            MenuInflater inflater = context.getMenuInflater();
+
+            int pos = this.getAdapterPosition();
+
+            RelatedLotteryGroupModel item = myGroupList.get(pos);
+            DrawerActivity.longPressSelectedItem = item;
+
+            if (item.isAdmin()) {
+                inflater.inflate(R.menu.menu_mygroup_admin, menu);
+            } else
+                inflater.inflate(R.menu.menu_mygroup, menu);
+
+            menu.setHeaderTitle("-- Select Operations --");
+            menu.setHeaderIcon(R.drawable.admin);
+            menu.setGroupDividerEnabled(true);
         }
     }
 
-    public MyGroupRecyclerAdapter(List<RelatedLotteryGroupModel> myGroupList, Context context) {
+    public MyGroupRecyclerAdapter(List<RelatedLotteryGroupModel> myGroupList, Activity context) {
         this.myGroupList = myGroupList;
         this.context = context;
         this.orgMyGroupList = myGroupList;
@@ -56,14 +81,15 @@ public class MyGroupRecyclerAdapter extends RecyclerView.Adapter<MyGroupRecycler
         return new MyViewHolder(itemView);
     }
 
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         RelatedLotteryGroupModel myGroupItem = myGroupList.get(position);
         holder.grpName.setText(myGroupItem.getGroupName());
 
-        String status = "";
+        String status;
         if (!myGroupItem.getCampaignStatus().equals("")) {
-            status = ("Lottery Status: " + String.valueOf(myGroupItem.getCampaignStatus()));
+            status = ("Lottery Status: " + myGroupItem.getCampaignStatus());
             if (!myGroupItem.getCampaignStatus().equals(EnumCollection.CampaignStatus.Completed.toString())) {
                 holder.btn_inviteStatus.setTextColor(context.getResources().getColor(R.color.colorPrimary));
             } else if (!myGroupItem.getCampaignStatus().equals(EnumCollection.CampaignStatus.InProgress.toString())) {
@@ -149,6 +175,9 @@ public class MyGroupRecyclerAdapter extends RecyclerView.Adapter<MyGroupRecycler
         myGroupList.addAll(models);
     }
 
+    public RelatedLotteryGroupModel getItem(int pos) {
+        return myGroupList.get(pos);
+    }
 
     @Override
     public int getItemCount() {

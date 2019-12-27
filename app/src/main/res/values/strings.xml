@@ -26,6 +26,7 @@
     <string name="title_activity_load_coin">LoadCoinActivity</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_intro">IntroActivity</string>
+    <string name="loadCoins">Load coins</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

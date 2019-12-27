@@ -13,7 +13,7 @@
         android:id="@+id/card_view_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/light_orange"
+        card_view:cardBackgroundColor="@color/fair_grey"
         card_view:cardCornerRadius="6dp"
         card_view:cardElevation="4dp"
         card_view:cardMaxElevation="6dp"
@@ -37,7 +37,7 @@
                 android:gravity="center"
                 android:text="All set to start lucky draw"
                 android:textColor="@color/purple"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/txt_description"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:text="Press button below to start lucky draw!"
                 android:textSize="18sp" />
 
@@ -64,8 +64,9 @@
                 android:text="Get me back to lottery create screen."
                 android:gravity="center"
                 style="@style/NormalMaterialButton"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:padding="15dp"
+                android:textColor="@color/grey"
                 android:textAllCaps="false"
                 />
         </LinearLayout>

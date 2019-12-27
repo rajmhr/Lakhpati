@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/userOps">
+        <item
+            android:id="@+id/menuItem_invite"
+            android:icon="@drawable/back_arrow"
+            android:title="@string/inviteToGroups" />
+
+        <item
+            android:id="@+id/menuItem_leaveGroup"
+            android:icon="@drawable/admin"
+            android:title="@string/leaveGroup" />
+    </group>
+</menu>

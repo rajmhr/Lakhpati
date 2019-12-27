@@ -79,7 +79,6 @@ public class GroupDetailActivity extends AppCompatActivity implements InternetCo
     public static LotteryGroupCampaignDetailModel commonFragmentModel;
 
     AlertDialog alertDialog;
-    public Map<Integer, Fragment> fragmentMap = new HashMap<Integer, Fragment>();
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -99,14 +98,15 @@ public class GroupDetailActivity extends AppCompatActivity implements InternetCo
 
     void initGroupDetail() {
         setContentView(R.layout.activity_groupdetail);
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView =  findViewById(R.id.navigation);
 
-        activity_main = (RelativeLayout) findViewById(R.id.activity_main);
+        activity_main = findViewById(R.id.activity_main);
         ((RetrofitClientInstance) getApplication()).setInternetConnectionListener(this);
 
         alertDialog = Dialogs.getInstance().initLoaderDialog(this);
-        Fragment frameToLoad = null;
+        Fragment frameToLoad;
 
+        //notification purpose
         Intent i = getIntent();
         Integer groupId = i.getIntExtra("groupId", 0);
 
@@ -161,7 +161,6 @@ public class GroupDetailActivity extends AppCompatActivity implements InternetCo
                 bottomNavigationView.setSelectedItemId(id);
             }
         });
-
     }
 
     private Fragment getRelatedFragment(int itemId) {
@@ -236,18 +235,8 @@ public class GroupDetailActivity extends AppCompatActivity implements InternetCo
         assignAdmin_alertDialog = alertDialogBuilder.create();
         assignAdmin_alertDialog.show();
 
-        btn_cancel_assignAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                assignAdmin_alertDialog.cancel();
-            }
-        });
-        btn_create_assignAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveAssignAdmin();
-            }
-        });
+        btn_cancel_assignAdmin.setOnClickListener(v -> assignAdmin_alertDialog.cancel());
+        btn_create_assignAdmin.setOnClickListener(v -> saveAssignAdmin());
     }
 
     private void initAssignAdminControl() {
@@ -322,10 +311,9 @@ public class GroupDetailActivity extends AppCompatActivity implements InternetCo
         // Get layout inflater object.
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         addUserToGroup_dialogView = layoutInflater.inflate(R.layout.activity_add_user_togroup, null);
-        txt_userName = (TextInputEditText) addUserToGroup_dialogView.findViewById(R.id.txt_userName);
-        //btn_findUser = (MaterialButton) addUserToGroup_dialogView.findViewById(R.id.btn_findUser);
-        btn_save_addUserToGroup = (MaterialButton) addUserToGroup_dialogView.findViewById(R.id.btn_save_addUserToGroup);
-        btn_cancel_addUserToGroup = (MaterialButton) addUserToGroup_dialogView.findViewById(R.id.btn_cancel_addUserToGroup);
+        txt_userName = addUserToGroup_dialogView.findViewById(R.id.txt_userName);
+        btn_save_addUserToGroup = addUserToGroup_dialogView.findViewById(R.id.btn_save_addUserToGroup);
+        btn_cancel_addUserToGroup = addUserToGroup_dialogView.findViewById(R.id.btn_cancel_addUserToGroup);
     }
 
     private void addUserToGroup() {
@@ -409,7 +397,7 @@ public class GroupDetailActivity extends AppCompatActivity implements InternetCo
             }
         });
     }*/
-
+//Add user to group
     private void addUserToGroupDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         // Set title, icon, can not cancel properties.
@@ -440,17 +428,6 @@ public class GroupDetailActivity extends AppCompatActivity implements InternetCo
                     addUserToGroup();
             }
         });
-       /* btn_findUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean result = new HelperClass().isEmailValid(txt_userName.getText().toString().trim());
-                if (!result) {
-                    setFineResultText("Please enter valid email id.", getResources().getColor(R.color.primary_dark));
-                } else {
-                    findUser();
-                }
-            }
-        });*/
     }
 
     private boolean validateAddUserToGroup() {

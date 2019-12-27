@@ -74,7 +74,7 @@
     </style>
 
     <style name="AppThemeLakhpati" parent="MyMaterialTheme.Base">
-
+        <item name="android:textColorHint">@color/white</item>
     </style>
 
     <style name="LoginTheme" parent="AppThemeLakhpati">
@@ -153,7 +153,6 @@
     </style>
 
     <style name="DrawerTheme" parent="AppThemeLakhpati">
-        <item name="colorSurface">#010101</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

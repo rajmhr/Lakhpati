@@ -22,7 +22,7 @@ public class RetrofitClientInstance extends Application {
     private static Retrofit retrofit;
     public static final String BASE_URL = "http://192.168.100.101/Lakhpati.Api/api/";
     public static final String BASE_HUB_URL = "http://192.168.100.101/Lakhpati.Api/";
-    /*public static final String BASE_URL = "http://api-lakhpati.kbits.com.np/api/";
+  /*  public static final String BASE_URL = "http://api-lakhpati.kbits.com.np/api/";
     public static final String BASE_HUB_URL = "http://api-lakhpati.kbits.com.np/";*/
 
     private static InternetConnectionListener mInternetConnectionListener;
@@ -52,12 +52,7 @@ public class RetrofitClientInstance extends Application {
 
     public static Retrofit getRetrofitInstance() {
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String s) {
-                Log.d("inter", s);
-            }
-        });
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(s -> Log.d("inter", s));
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 

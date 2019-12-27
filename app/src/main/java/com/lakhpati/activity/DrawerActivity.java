@@ -2,10 +2,10 @@ package com.lakhpati.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,14 +24,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,23 +42,20 @@ import com.infideap.drawerbehavior.AdvanceDrawerLayout;
 import com.infideap.drawerbehavior.BuildConfig;
 import com.lakhpati.R;
 import com.lakhpati.Services.InternetConnectionListener;
+import com.lakhpati.Services.LotteryGroupApiInterface;
 import com.lakhpati.Services.MyGroupApiInterface;
-import com.lakhpati.Services.UserApiInterface;
-import com.lakhpati.Services.UserMessageApiInterface;
 import com.lakhpati.Utilities.Dialogs;
 import com.lakhpati.Utilities.HelperClass;
 import com.lakhpati.Utilities.LoginPreference;
+import com.lakhpati.Utilities.MessageDisplay;
 import com.lakhpati.Utilities.MyGroupPreference;
-import com.lakhpati.adapters.AllUserTicketsAdapter;
 import com.lakhpati.adapters.MyGroupRecyclerAdapter;
 import com.lakhpati.adapters.NotificationAdapter;
 import com.lakhpati.internalService.SignalRChatService;
-import com.lakhpati.models.AllUserTicketViewModel;
-import com.lakhpati.models.CoinHistoryModel;
+import com.lakhpati.models.GroupMembersViewModel;
 import com.lakhpati.models.LoginModel;
 import com.lakhpati.models.LotteryGroupModel;
-import com.lakhpati.models.NotificationModel;
-import com.lakhpati.models.NotificationSpModel;
+import com.lakhpati.models.LotteryUserGroupViewModel;
 import com.lakhpati.models.RelatedLotteryGroupModel;
 import com.lakhpati.models.ReturnModel;
 import com.lakhpati.models.UserDetailViewModel;
@@ -116,6 +112,7 @@ public class DrawerActivity extends AppCompatActivity
     public static DrawerActivity drawerActivity;
     public static UserDetailViewModel userCommonModel;
     public static RelatedLotteryGroupModel activeLotteryGroup;
+    public static RelatedLotteryGroupModel longPressSelectedItem;
 
     AlertDialog alertDialog;
     AlertDialog addGroupAlertDialog;
@@ -123,6 +120,12 @@ public class DrawerActivity extends AppCompatActivity
     MaterialButton btnGroupCreate;
     MaterialButton btnGroupCancel;
     NotificationAdapter allUserTicketsAdapter;
+
+    View addUserToGroup_dialogView;
+    AlertDialog addUserToGroup_alertDialog;
+    MaterialButton btn_cancel_addUserToGroup;
+    MaterialButton btn_save_addUserToGroup;
+    TextInputEditText txt_userName;
 //endregion
 
     //region Native Methods
@@ -218,6 +221,134 @@ public class DrawerActivity extends AppCompatActivity
         setupSearchView();
         loadMyGroups(false);
     }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuItem_leaveGroup:
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle("Leave group ?")
+                        .setMessage("Are you sure to leave group ?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                            if (longPressSelectedItem.getGroupId() > 0)
+                                leaveGroup(longPressSelectedItem.getGroupId());
+                            else
+                                MessageDisplay.getInstance().showErrorToast("Oops!! Please try again.", getApplication());
+                        })
+                        .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.cancel()).show();
+                break;
+            case R.id.menuItem_deleteGroup:
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle("Are you sure ?")
+                        .setMessage("This will delete your group.")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                            if (longPressSelectedItem.getGroupId() > 0)
+                                deleteGroup(longPressSelectedItem.getGroupId());
+                            else
+                                MessageDisplay.getInstance().showErrorToast("Oops!! Please try again.", getApplication());
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }).show();
+                break;
+            case R.id.menuItem_invite:
+                addUserToGroupDialog();
+                break;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    private void addUserToGroupDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        // Set title, icon, can not cancel properties.
+        alertDialogBuilder.setTitle("Add user to group..");
+        alertDialogBuilder.setIcon(R.drawable.img_user);
+        alertDialogBuilder.setCancelable(false);
+
+        // Init popup dialog view and it's ui controls.
+        initAddUserToGroupControl();
+
+        // Set the inflated layout view object to the AlertDialog builder.
+        alertDialogBuilder.setView(addUserToGroup_dialogView);
+
+        // Create AlertDialog and show.
+        addUserToGroup_alertDialog = alertDialogBuilder.create();
+        addUserToGroup_alertDialog.show();
+
+        btn_cancel_addUserToGroup.setOnClickListener(v -> addUserToGroup_alertDialog.cancel());
+        btn_save_addUserToGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateAddUserToGroup())
+                    addUserToGroup();
+            }
+        });
+    }
+
+    private boolean validateAddUserToGroup() {
+        if (txt_userName.getText().toString().equals("")) {
+            txt_userName.setError("Please enter email id to add to group.");
+            return false;
+        }
+        return true;
+    }
+
+    private void initAddUserToGroupControl() {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        addUserToGroup_dialogView = layoutInflater.inflate(R.layout.activity_add_user_togroup, null);
+        txt_userName = addUserToGroup_dialogView.findViewById(R.id.txt_userName);
+        btn_save_addUserToGroup = addUserToGroup_dialogView.findViewById(R.id.btn_save_addUserToGroup);
+        btn_cancel_addUserToGroup = addUserToGroup_dialogView.findViewById(R.id.btn_cancel_addUserToGroup);
+    }
+
+    private void addUserToGroup() {
+        alertDialog.show();
+        String helperText = "@gmail.com";
+        LotteryGroupApiInterface lotteryGroupApi = RetrofitClientInstance.getRetrofitInstance().create(LotteryGroupApiInterface.class);
+
+        LotteryUserGroupViewModel model = new LotteryUserGroupViewModel();
+        model.setLotteryUserGroupId(longPressSelectedItem.getLotteryUserGroupId());
+        model.setEmailId(txt_userName.getText().toString() + helperText);
+        model.setUserDisplayName(DrawerActivity.userCommonModel.getDisplayName());
+        model.setGroupId(longPressSelectedItem.getGroupId());
+        model.setGroupName(longPressSelectedItem.getGroupName());
+        //model.setUserDetailId(myGroupModel.getUserDetailId());
+        model.setUserDetailId(DrawerActivity.userCommonModel.getUserDetailId());
+
+        Call<ReturnModel> callValue = lotteryGroupApi.addUserToGroup(model);
+        callValue.enqueue(new Callback<ReturnModel>() {
+            @Override
+            public void onResponse(Call<ReturnModel> call, Response<ReturnModel> response) {
+                String message = response.body().getMessage();
+
+                if (response.body().isSuccess()) {
+                    addUserToGroup_alertDialog.cancel();
+                    Gson gson = new GsonBuilder().create();
+                    GroupMembersViewModel findUser = gson.fromJson(response.body().getReturnData(), new TypeToken<GroupMembersViewModel>() {
+                    }.getType());
+                    MessageDisplay.getInstance().showSuccessToast(message, getApplication());
+                } else {
+                    txt_userName.setError(message);
+                    MessageDisplay.getInstance().showErrorToast(message, getApplication());
+                }
+                alertDialog.cancel();
+            }
+
+            @Override
+            public void onFailure(Call<ReturnModel> call, Throwable t) {
+                MessageDisplay.getInstance().showErrorToast(new ReturnModel().getGlobalErrorMessage().getMessage(), getApplication());
+                alertDialog.cancel();
+            }
+        });
+    }
+
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -254,6 +385,7 @@ public class DrawerActivity extends AppCompatActivity
 
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -281,6 +413,62 @@ public class DrawerActivity extends AppCompatActivity
     //endregion
 
     //region Private Methods
+
+    //leave group
+    private void leaveGroup(int groupId) {
+        alertDialog.show();
+        MyGroupApiInterface lotteryGroupApi = RetrofitClientInstance.getRetrofitInstance().create(MyGroupApiInterface.class);
+
+        Call<ReturnModel> callValue = lotteryGroupApi.leaveGroup(groupId);
+        callValue.enqueue(new Callback<ReturnModel>() {
+            @Override
+            public void onResponse(Call<ReturnModel> call, Response<ReturnModel> response) {
+                alertDialog.cancel();
+                String message = response.body().getMessage();
+
+                if (response.body().isSuccess()) {
+                    MessageDisplay.getInstance().showSuccessToast(message, getApplication());
+                } else {
+                    MessageDisplay.getInstance().showErrorToast(message, getApplication());
+                }
+                myGroupRecycleAdapter.removeItem(groupId);
+            }
+
+            @Override
+            public void onFailure(Call<ReturnModel> call, Throwable t) {
+                MessageDisplay.getInstance().showErrorToast(new ReturnModel().getGlobalErrorMessage().getMessage(), getApplication());
+            }
+        });
+    }
+
+    //delete group
+    private void deleteGroup(int groupId) {
+        alertDialog.show();
+        MyGroupApiInterface lotteryGroupApi = RetrofitClientInstance.getRetrofitInstance().create(MyGroupApiInterface.class);
+
+        Call<ReturnModel> callValue = lotteryGroupApi.deleteGroup(groupId);
+        callValue.enqueue(new Callback<ReturnModel>() {
+            @Override
+            public void onResponse(Call<ReturnModel> call, Response<ReturnModel> response) {
+                String message = response.body().getMessage();
+                alertDialog.cancel();
+
+                if (response.body().isSuccess()) {
+                    MessageDisplay.getInstance().showSuccessToast(message, getApplication());
+                } else {
+                    MessageDisplay.getInstance().showErrorToast(message, getApplication());
+                }
+                myGroupRecycleAdapter.removeItem(groupId);
+            }
+
+            @Override
+            public void onFailure(Call<ReturnModel> call, Throwable t) {
+                MessageDisplay.getInstance().showErrorToast(new ReturnModel().getGlobalErrorMessage().getMessage(), getApplication());
+                alertDialog.cancel();
+            }
+        });
+    }
+
     private void initMyGroupAdapter() {
         myGroupRecycleAdapter = new MyGroupRecyclerAdapter(myGroupModelList, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -386,12 +574,12 @@ public class DrawerActivity extends AppCompatActivity
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         popupInputDialogView = layoutInflater.inflate(R.layout.activity_creategroup, null);
         groupName = (TextInputEditText) popupInputDialogView.findViewById(R.id.createGroup_txtGroupName);
-        btnGroupCreate = (MaterialButton) popupInputDialogView.findViewById(R.id.btnGroupCreate);
-        btnGroupCancel = (MaterialButton) popupInputDialogView.findViewById(R.id.btnGroupCancel);
+        btnGroupCreate = popupInputDialogView.findViewById(R.id.btnGroupCreate);
+        btnGroupCancel = popupInputDialogView.findViewById(R.id.btnGroupCancel);
     }
 
     private boolean validateCreateGroup() {
-        if (groupName.getText().toString() == "") {
+        if (groupName.getText().toString().equals("")) {
             groupName.setError("Please enter group name.");
             return false;
         }
@@ -490,7 +678,6 @@ public class DrawerActivity extends AppCompatActivity
                 }
                 alertDialog.cancel();
             }
-
             @Override
             public void onFailure(Call<ReturnModel> call, Throwable t) {
                 alertDialog.cancel();
@@ -505,6 +692,5 @@ public class DrawerActivity extends AppCompatActivity
         notification_recycleView.setItemAnimator(new DefaultItemAnimator());
         notification_recycleView.setAdapter(allUserTicketsAdapter);
     }
-
     //endregion
 }
